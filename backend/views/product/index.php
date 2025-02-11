@@ -1,9 +1,13 @@
 <?php
+
 /** @var yii\web\View $this */
+
+use common\models\ProductSearch;
 use yii\helpers\Html;
 use yii\grid\GridView;
-$this->title ="Products";
-$this->params['breadcrumbs'][] = $this->title; 
+
+$this->title = "Products";
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="product-index">
@@ -15,17 +19,18 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= GridView::widget([
-        'dataProvider' => $products,
+        'filterModel' => $searchModel,
+        'dataProvider' => $dataProvider,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'], 
+            ['class' => 'yii\grid\SerialColumn'],
             'product_name',
             'product_price',
             'product_quantity',
-            'product_description', 
+            'product_description',
             [
-                'attribute'=>'product_category_id',
-                'label'=>'Category',
-                'value'=>function($model){
+                'attribute' => 'product_category_id',
+                'label' => 'Category',
+                'value' => function ($model) {
                     return $model->productCategory->category_name ?? '(Not Set)';
                 }
 
@@ -38,4 +43,3 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
-

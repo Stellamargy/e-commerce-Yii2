@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use common\models\Product;
+use common\models\ProductSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
@@ -17,17 +18,13 @@ class ProductController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        $productsData=new ActiveDataProvider([
-            'query'=>Product::find(),
-            'pagination'=>[
-                'pageSize'=>10,
-            ],
-            'sort' => [
-            'defaultOrder' => ['id' => SORT_DESC], 
-        ],
+        $productsSearchModel = new ProductSearch();
+        $dataProvider = $productsSearchModel->search(Yii::$app->request->queryParams);
+        return $this->render('index', [
+            'searchModel' => $productsSearchModel,
+            'dataProvider' => $dataProvider,
         ]);
-      
-        return $this->render('index', ['products' => $productsData]);
+
     }
 
     public function actionUpdate($id)
