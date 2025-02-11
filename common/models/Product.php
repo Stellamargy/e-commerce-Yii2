@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "product".
@@ -19,6 +20,7 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord
 {
+    public $productImageFile;
     /**
      * {@inheritdoc}
      */
@@ -40,6 +42,7 @@ class Product extends \yii\db\ActiveRecord
             [['product_image_url'], 'string', 'max' => 255],
             [['product_name'], 'unique'],
             [['product_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductCategory::class, 'targetAttribute' => ['product_category_id' => 'id']],
+            [['productImageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -76,5 +79,18 @@ class Product extends \yii\db\ActiveRecord
     public static function find()
     {
         return new ProductQuery(get_called_class());
+    }
+
+    public function upload()
+    {
+        if ($this->validate()) { // Validate model and file
+            $filePath = 'uploads/' . uniqid() . '.' . $this->productImageFile->extension; // Generate unique file name
+
+            if ($this->productImageFile->saveAs($filePath)) { // Save the file in the uploads directory
+                $this->product_image_url = $filePath; // Store file path in DB
+                return true;
+            }
+        }
+        return false;
     }
 }

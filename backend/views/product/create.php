@@ -1,9 +1,16 @@
 <?php
 /** @var yii\web\View $this */
-?>
-<h1>product/create</h1>
+use yii\helpers\Html;
+$this->title = 'Create Product';
+$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
+?>
+
+<div>
+   <h1><?= Html::encode($this->title) ?></h1>
+   <?php
+   echo $this->render('_form') ;
+   ?>
+</div>
+

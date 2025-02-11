@@ -12,11 +12,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="product-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="d-flex justify-content-between">
+        <h1 class="fs-2"><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <p>
+            <?= Html::a('Add Product', ['create'], ['class' => 'btn btn-primary']) ?>
+        </p>
+    </div>
+
 
     <?= GridView::widget([
         'filterModel' => $searchModel,
