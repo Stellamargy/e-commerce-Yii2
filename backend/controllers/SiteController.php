@@ -8,6 +8,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -100,5 +101,17 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+
+    public function actionImage($filename)
+    {
+        $filePath = Yii::getAlias('@common/uploads/').$filename;
+
+        if (!file_exists($filePath)) {
+            throw new NotFoundHttpException("Image not found");
+        }
+
+        return Yii::$app->response->sendFile($filePath);
     }
 }

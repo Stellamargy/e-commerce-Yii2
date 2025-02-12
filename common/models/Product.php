@@ -42,7 +42,7 @@ class Product extends \yii\db\ActiveRecord
             [['product_image_url'], 'string', 'max' => 255],
             [['product_name'], 'unique'],
             [['product_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProductCategory::class, 'targetAttribute' => ['product_category_id' => 'id']],
-            [['productImageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
+             [['productImageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -58,7 +58,7 @@ class Product extends \yii\db\ActiveRecord
             'product_description' => 'Product Description',
             'product_price' => 'Product Price',
             'product_quantity' => 'Product Quantity',
-            'product_category_id' => 'Product Category ID',
+            'product_category_id' => 'Product Category ',
         ];
     }
 
@@ -81,16 +81,19 @@ class Product extends \yii\db\ActiveRecord
         return new ProductQuery(get_called_class());
     }
 
+
     public function upload()
     {
-        if ($this->validate()) { // Validate model and file
-            $filePath = 'uploads/' . uniqid() . '.' . $this->productImageFile->extension; // Generate unique file name
+            
+        $uniqueName = uniqid() . '.' . $this->productImageFile->extension;
+        $filePath = Yii::getAlias('@common/uploads/') . $uniqueName; // Full path
 
-            if ($this->productImageFile->saveAs($filePath)) { // Save the file in the uploads directory
-                $this->product_image_url = $filePath; // Store file path in DB
-                return true;
-            }
+        if ($this->productImageFile->saveAs($filePath)) {
+            $this->product_image_url = $uniqueName; // ✅ Store only the filename
+            return true;
         }
+
         return false;
     }
+
 }

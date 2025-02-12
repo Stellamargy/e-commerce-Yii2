@@ -37,14 +37,14 @@ class ProductController extends \yii\web\Controller
         $model = new Product();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'productImageFile');
+            $model->productImageFile = UploadedFile::getInstance($model, 'productImageFile');
+           
 
-            if ($model->productImageFile) {
-                if ($model->upload()) {
-                    if ($model->save(false)) {
-                        Yii::$app->session->setFlash('success', 'Product created successfully!');
-                        return $this->redirect(['view', 'id' => $model->id]);
-                    }
+
+            if ($model->productImageFile && $model->upload()) {
+                if ($model->save(false)) {
+                    Yii::$app->session->setFlash('success', 'Product created successfully!');
+                    return $this->redirect(['view', 'id' => $model->id]);
                 }
             }
 
