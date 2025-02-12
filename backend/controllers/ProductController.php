@@ -33,54 +33,63 @@ class ProductController extends \yii\web\Controller
 
 
     public function actionCreate()
-{
-    $model = new Product();
+    {
+        $model = new Product();
 
-    if ($model->load(Yii::$app->request->post())) { 
-        $model->imageFile = UploadedFile::getInstance($model, 'imageFile'); 
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'productImageFile');
 
-        if ($model->imageFile) {
-            if ($model->upload()) { 
-                if ($model->save(false)) { 
-                    Yii::$app->session->setFlash('success', 'Product created successfully!');
-                    return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->productImageFile) {
+                if ($model->upload()) {
+                    if ($model->save(false)) {
+                        Yii::$app->session->setFlash('success', 'Product created successfully!');
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
                 }
             }
+
+            // If no file was uploaded, show an error
+            $model->addError('productImageFile', 'Product image is required.');
         }
 
-        // If no file was uploaded, show an error
-        $model->addError('imageFile', 'Product image is required.');
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
-
-    return $this->render('create', [
-        'model' => $model,
-    ]);
-}
 
 
 
     public function actionUpdate($id)
     {
-
-        $product = Product::findOne($id);
-
-        if ($product === null) {
+        $model = Product::findOne($id);
+    
+        if ($model === null) {
             throw new NotFoundHttpException('Product not found.');
         }
-
-
-        if (Yii::$app->request->isPost) {
-
-            if ($product->load(Yii::$app->request->post()) && $product->validate()) {
-
-                if ($product->save()) {
+    
+        $oldImagePath = $model->product_image_url; // Store the old image path
+    
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'productImageFile');
+    
+            if ($model->productImageFile) { // If a new image is uploaded
+                if ($model->upload()) { // Upload and update image path
+                    if ($model->save(false)) {
+                        Yii::$app->session->setFlash('success', 'Product updated successfully!');
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                }
+            } else {
+                // If no new image is uploaded, keep the old image
+                $model->product_image_url = $oldImagePath;
+                if ($model->save()) {
                     Yii::$app->session->setFlash('success', 'Product updated successfully!');
-                    return $this->redirect(['view', 'id' => $product->id]);
+                    return $this->redirect(['view', 'id' => $model->id]);
                 }
             }
         }
-
-
-        return $this->render('update', ['product' => $product]);
+    
+        return $this->render('update', ['model' => $model]);
     }
+    
 }

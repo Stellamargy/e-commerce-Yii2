@@ -19,7 +19,7 @@ use common\models\ProductCategory;
         ) ?>
         
         <!-- File Upload Field -->
-        <?= $form->field($model, 'imageFile')->fileInput() ?>
+        <?= $form->field($model, 'productImageFile')->fileInput() ?>
 
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

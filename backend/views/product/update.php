@@ -1,9 +1,17 @@
 <?php
 /** @var yii\web\View $this */
+use yii\helpers\Html ;
+$this->title = 'Update Product: ' . $model->product_name;
+$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->product_name, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Update';
 ?>
-<h1>product/update</h1>
 
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
+<div class="update-form">
+<h1><?= Html::encode($this->title) ?></h1>
+   <?php
+   echo $this->render('_form' , ['model' => $model]) ;
+   ?>
+
+</div>
+
