@@ -7,8 +7,8 @@ $this->params['breadcrumbs'][] = ['label' => $model->product_name, 'url' => ['vi
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 
-<div class="update-form">
-<h1><?= Html::encode($this->title) ?></h1>
+<div class="update-form container">
+
    <?php
    echo $this->render('_form' , ['model' => $model]) ;
    ?>
