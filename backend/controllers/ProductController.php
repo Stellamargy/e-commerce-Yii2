@@ -70,7 +70,7 @@ class ProductController extends \yii\web\Controller
         $oldImagePath = $model->product_image_url; // Store the old image path
     
         if ($model->load(Yii::$app->request->post())) {
-            $model->imageFile = UploadedFile::getInstance($model, 'productImageFile');
+            $model->productImageFile = UploadedFile::getInstance($model, 'productImageFile');
     
             if ($model->productImageFile) { // If a new image is uploaded
                 if ($model->upload()) { // Upload and update image path
@@ -91,5 +91,29 @@ class ProductController extends \yii\web\Controller
     
         return $this->render('update', ['model' => $model]);
     }
+    public function actionDeleteProduct($id)
+{
+    $model = Product::findOne($id);
+
+    if (!$model) {
+        throw new NotFoundHttpException('Product not found.');
+    }
+
+    // Delete the image file if it exists
+    $filePath = Yii::getAlias('@common/uploads/') . $model->product_image_url;
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+
+    // Delete product from the database
+    if ($model->delete()) {
+        Yii::$app->session->setFlash('success', 'Product deleted successfully.');
+    } else {
+        Yii::$app->session->setFlash('error', 'Failed to delete product.');
+    }
+
+    return $this->redirect(['index']); // Redirect to product list
+}
+
     
 }

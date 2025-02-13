@@ -10,7 +10,7 @@ $this->title = "Products";
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="product-index">
+<div class="product-index container">
 
     <div class="d-flex justify-content-between">
         <h1 class="fs-2"><?= Html::encode($this->title) ?></h1>

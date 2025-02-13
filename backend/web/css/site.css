@@ -88,3 +88,31 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.product-image{
+    
+    height: 200px;
+    object-fit: cover;
+   
+}
+.product-view{
+    width:50%;
+    margin:0 auto;
+    
+}
+span{
+    font-weight: 900;
+}
+
+
+ /* My own custom styles. */
+
+ /* nav-header. */
+.navbar-bg{
+    background-color: #002b67 ;
+}
+.brand-name{
+    font-family: "Delicious Handrawn", serif;
+}
+
+
