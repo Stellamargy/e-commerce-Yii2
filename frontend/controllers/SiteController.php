@@ -15,6 +15,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -255,5 +256,16 @@ class SiteController extends Controller
         return $this->render('resendVerificationEmail', [
             'model' => $model
         ]);
+    }
+
+    public function actionImage($filename)
+    {
+        $filePath = Yii::getAlias('@common/uploads/').$filename;
+
+        if (!file_exists($filePath)) {
+            throw new NotFoundHttpException("Image not found");
+        }
+
+        return Yii::$app->response->sendFile($filePath);
     }
 }
