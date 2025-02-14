@@ -3,40 +3,56 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/** @var yii\web\View $this */
-/** @var common\models\Product $model */
+/* @var $this yii\web\View */
+/* @var $model app\models\Product */
 
-$this->title = $model->id;
+$this->title = $model->product_name;
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
 ?>
 <div class="product-view">
+    <div class="container mt-5">
+        <div class="row">
+            <!-- Product Image Column -->
+            <div class="col-md-6">
+                <div class="card">
+                    <img src="<?= Yii::$app->urlManager->createUrl(['site/image', 'filename' => $model->product_image_url]) ?>"
+                        class="card-img-top object-fit-cover"
+                        style="height: 200px;"
+                        alt="<?= Html::encode($model->product_name) ?>">
+                </div>
+            </div>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+            <!-- Product Details Column -->
+            <div class="col-md-6">
+                <h1><?= Html::encode($this->title) ?></h1>
+                
+                <div class="product-category mb-3">
+                    <span class="badge bg-secondary">
+                        <?= Html::encode($model->productCategory->category_name) ?>
+                    </span>
+                </div>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+                <div class="product-price mb-4">
+                    <h2 class="text-primary">
+                        $<?= number_format($model->product_price, 2) ?>
+                    </h2>
+                </div>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'product_name',
-            'product_image_url:url',
-            'product_description:ntext',
-            'product_price',
-            'product_quantity',
-            'product_category_id',
-        ],
-    ]) ?>
+                <div class="product-description mb-4">
+                    <h5>Description</h5>
+                    <p><?= Html::encode($model->product_description) ?></p>
+                </div>
 
+                <!-- Stock Status -->
+                <div class="stock-status mb-4">
+                    <?php if ($model->product_quantity > 0): ?>
+                        <span class="badge bg-success">In Stock (<?= $model->product_quantity ?> available)</span>
+                    <?php else: ?>
+                        <span class="badge bg-danger">Out of Stock</span>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

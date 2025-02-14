@@ -1,5 +1,4 @@
 <?php
-
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
@@ -48,11 +47,11 @@ use common\models\ProductCategory;
                 </div>
 
                 <div class="row mt-3">
-                    <div class="d-grid gap-2 col-6 mx-auto">
-                        <button class="btn btn-primary" type="button">Submit</button>
-                        
+                    <div class="col-12">
+                        <?= Html::submitButton('Save', ['class' => 'btn btn-primary btn-lg']) ?>
                     </div>
                 </div>
+                
 
                 <?php ActiveForm::end(); ?>
             </div>

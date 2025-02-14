@@ -6,12 +6,18 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+
 $this->title = 'Products';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="products-index">
-    <h1 class="mb-4"><?= Html::encode($this->title) ?></h1>
+
+    <div>
+        <?php
+        echo $this->render('_categories');
+        ?>
+    </div>
 
     <div class="row g-4">
         <?php foreach ($products as $product): ?>
@@ -19,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="card h-100 shadow-sm">
                     <img src="<?= Yii::$app->urlManager->createUrl(['site/image', 'filename' => $product->product_image_url]) ?>"
                         class="card-img-top object-fit-cover"
-                        style="height: 200px;"
+                        style="height: 150px;"
                         alt="<?= Html::encode($product->product_name) ?>">
 
                     <div class="card-body d-flex flex-column">
@@ -76,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     /* For Webkit browsers */
     ::-webkit-scrollbar {
-        width: 8px;
+        width: 4px;
     }
 
     ::-webkit-scrollbar-track {

@@ -11,6 +11,11 @@ use yii\bootstrap5\Nav;
             'linkOptions' => ['class' => 'nav-link py-2 text-secondary-emphasis']
         ],
         [
+            'label' => '<i class="fa-solid fa-tag"></i> <span class="ms-2">Categories</span>', 
+            'url' => ['product-category/index'],
+            'linkOptions' => ['class' => 'nav-link py-2 text-secondary-emphasis']
+        ],
+        [
             'label' => '<i class="fa-solid fa-truck fa-md"></i> <span class="ms-2">Orders</span>', 
             'url' => ['order/index'],
             'linkOptions' => ['class' => 'nav-link py-2 text-secondary-emphasis']
