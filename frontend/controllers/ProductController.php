@@ -2,7 +2,9 @@
 
 namespace frontend\controllers;
 
+use Yii;
 use common\models\Product;
+use common\models\ProductQuery;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -36,14 +38,25 @@ class ProductController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
-       $products=Product::find()->all();
-        return $this->render('index' ,[
-            'products'=>$products
-        ]);
-    }
 
+
+     public function actionIndex()
+     {
+         $query = Product::find();
+         
+         if (Yii::$app->request->isAjax) {
+             $filteredProducts = $query->filteredProducts()->all();
+             return $this->renderAjax('_products', [
+                 'products' => $filteredProducts
+             ]);
+         }
+         
+         $defaultProducts = $query->all();
+         return $this->render('index', [
+             'products' => $defaultProducts
+         ]);
+     }
+     
     /**
      * Displays a single Product model.
      * @param int $id ID
@@ -52,9 +65,9 @@ class ProductController extends Controller
      */
     public function actionView($id)
     {
-        $model=$this->findModel($id);
+        $model = $this->findModel($id);
         return $this->render('view', [
-            'model' =>$model ,
+            'model' => $model,
         ]);
     }
 
@@ -113,6 +126,9 @@ class ProductController extends Controller
 
         return $this->redirect(['index']);
     }
+
+
+
 
     /**
      * Finds the Product model based on its primary key value.

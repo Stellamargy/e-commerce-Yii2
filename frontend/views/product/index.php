@@ -4,97 +4,102 @@
 /** @var common\models\Product[] $products */
 
 use yii\helpers\Html;
-use yii\helpers\Url;
-
+use yii\helpers\ArrayHelper;
+use common\models\ProductCategory;
 
 $this->title = 'Products';
 $this->params['breadcrumbs'][] = $this->title;
+
+$dropdownOptions = [
+    'class' => 'form-control',
+    'prompt' => 'Select Category',
+    'data-url' => \yii\helpers\Url::to(['product/index']),
+    'onchange' => 'filterProducts(this.value)'
+];
+
+$productsCategory = ProductCategory::find()->all();
+$categoryList = ArrayHelper::map($productsCategory, 'id', 'category_name');
 ?>
 
-<div class="products-index">
-
-    <div>
-        <?php
-        echo $this->render('_categories');
-        ?>
-    </div>
-
-    <div class="row g-4">
-        <?php foreach ($products as $product): ?>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="card h-100 shadow-sm">
-                    <img src="<?= Yii::$app->urlManager->createUrl(['site/image', 'filename' => $product->product_image_url]) ?>"
-                        class="card-img-top object-fit-cover"
-                        style="height: 150px;"
-                        alt="<?= Html::encode($product->product_name) ?>">
-
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title text-truncate mb-2">
-                            <?= Html::encode($product->product_name) ?>
-                        </h5>
-
-                        <p class="card-text text-muted small mb-3" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                            <?= Html::encode($product->product_description) ?>
-                        </p>
-
-                        <div class="mt-auto">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="fw-bold fs-5">$<?= number_format($product->product_price, 2) ?></span>
-                                <span class="badge bg-<?= $product->product_quantity > 0 ? 'success' : 'danger' ?>">
-                                    <?= $product->product_quantity > 0 ? 'In Stock' : 'Out of Stock' ?>
-                                </span>
-                            </div>
-
-                            <?= Html::a('View Details', ['view', 'id' => $product->id], [
-                                'class' => 'btn btn-outline-primary w-100'
-                            ]) ?>
-                        </div>
-                    </div>
-                </div>
+<div class="wrapper">
+    <!-- search and dropdown filters -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
+                <?= Html::dropDownList('category-filter', null, $categoryList, $dropdownOptions) ?>
             </div>
-        <?php endforeach; ?>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <?= Html::textInput('search-filter', null, [
+                    'class' => 'form-control',
+                    'placeholder' => 'Search products...',
+                    'onkeyup' => 'searchProducts(this.value)'
+                ]) ?>
+            </div>
+        </div>
     </div>
+
+    <!-- products container -->
+    <?php
+    echo  $this->render('_products',['products'=>$products]);
+    ?>
 </div>
 
-<style>
-    .card {
-        transition: transform 0.2s;
-        border: none;
-    }
 
-    .card:hover {
-        transform: translateY(-5px);
-    }
+<?php
+$js = <<<JS
+window.filterProducts = function(categoryId) {
+    const url = $('#category-filter').data('url');
+    const searchTerm = $('#search-filter').val();
+    
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: {
+            category: categoryId,
+            search: searchTerm
+        },
+        success: function(response) {
+            $('#products-container').html(response);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        }
+    });
+};
 
-    .object-fit-cover {
-        object-fit: cover;
-    }
+window.searchProducts = function(searchTerm) {
+    const url = $('#category-filter').data('url');
+    const categoryId = $('#category-filter').val();
+    
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: {
+            category: categoryId,
+            search: searchTerm
+        },
+        success: function(response) {
+            $('#products-container').html(response);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        }
+    });
+};
 
-    .btn-outline-primary {
-        border-width: 2px;
-    }
+// Optional: Add debounce to prevent too many requests while typing
+let searchTimeout;
+$('#search-filter').on('keyup', function() {
+    clearTimeout(searchTimeout);
+    const searchTerm = $(this).val();
+    
+    searchTimeout = setTimeout(function() {
+        window.searchProducts(searchTerm);
+    }, 500); // Wait 500ms after user stops typing
+});
+JS;
+$this->registerJs($js);
 
-    /* For Firefox */
-    * {
-        scrollbar-width: thin;
-        scrollbar-color: #888 #f1f1f1;
-    }
-
-    /* For Webkit browsers */
-    ::-webkit-scrollbar {
-        width: 4px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-</style>
+?>
