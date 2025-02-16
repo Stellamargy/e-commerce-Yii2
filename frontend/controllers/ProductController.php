@@ -46,6 +46,7 @@ class ProductController extends Controller
          
          if (Yii::$app->request->isAjax) {
              $filteredProducts = $query->filteredProducts()->all();
+            
              return $this->renderAjax('_products', [
                  'products' => $filteredProducts
              ]);

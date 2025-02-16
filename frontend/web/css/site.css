@@ -92,7 +92,7 @@ a.desc:after {
 
 /* style breadcrumb widget as in previous bootstrap versions */
 .breadcrumb {
-    background-color: var(--bs-gray-200);
+    background-color: #E2E3E5;
     border-radius: .25rem;
     padding: .75rem 1rem;
 }
@@ -100,4 +100,11 @@ a.desc:after {
 .breadcrumb-item > a
 {
     text-decoration: none;
+}
+
+.custom-navbar{
+    background-color: #002B67;
+}
+.brand-name{
+    font-family: "Delicious Handrawn", serif;
 }
