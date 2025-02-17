@@ -26,7 +26,7 @@ use yii\helpers\Html;
         // ],
         [
             'label' => 'Log Out <i class="fa-solid fa-arrow-right-from-bracket fa-lg"></i> ', 
-            'url' => ['auth/logout'],
+            'url' => ['user-management/auth/logout'],
             'linkOptions' => ['class' => 'nav-link text-white']
         ],
     ];

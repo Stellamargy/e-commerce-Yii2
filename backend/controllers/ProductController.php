@@ -13,8 +13,6 @@ class ProductController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-       
-        
         $productsSearchModel = new ProductSearch();
         $dataProvider = $productsSearchModel->search(Yii::$app->request->queryParams);
         return $this->render('index', [
@@ -40,7 +38,7 @@ class ProductController extends \yii\web\Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->productImageFile = UploadedFile::getInstance($model, 'productImageFile');
-           
+
 
 
             if ($model->productImageFile && $model->upload()) {
@@ -64,16 +62,16 @@ class ProductController extends \yii\web\Controller
     public function actionUpdate($id)
     {
         $model = Product::findOne($id);
-    
+
         if ($model === null) {
             throw new NotFoundHttpException('Product not found.');
         }
-    
+
         $oldImagePath = $model->product_image_url; // Store the old image path
-    
+
         if ($model->load(Yii::$app->request->post())) {
             $model->productImageFile = UploadedFile::getInstance($model, 'productImageFile');
-    
+
             if ($model->productImageFile) { // If a new image is uploaded
                 if ($model->upload()) { // Upload and update image path
                     if ($model->save(false)) {
@@ -90,32 +88,30 @@ class ProductController extends \yii\web\Controller
                 }
             }
         }
-    
+
         return $this->render('update', ['model' => $model]);
     }
     public function actionDeleteProduct($id)
-{
-    $model = Product::findOne($id);
+    {
+        $model = Product::findOne($id);
 
-    if (!$model) {
-        throw new NotFoundHttpException('Product not found.');
+        if (!$model) {
+            throw new NotFoundHttpException('Product not found.');
+        }
+
+        // Delete the image file if it exists
+        $filePath = Yii::getAlias('@common/uploads/') . $model->product_image_url;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        // Delete product from the database
+        if ($model->delete()) {
+            Yii::$app->session->setFlash('success', 'Product deleted successfully.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Failed to delete product.');
+        }
+
+        return $this->redirect(['index']); // Redirect to product list
     }
-
-    // Delete the image file if it exists
-    $filePath = Yii::getAlias('@common/uploads/') . $model->product_image_url;
-    if (file_exists($filePath)) {
-        unlink($filePath);
-    }
-
-    // Delete product from the database
-    if ($model->delete()) {
-        Yii::$app->session->setFlash('success', 'Product deleted successfully.');
-    } else {
-        Yii::$app->session->setFlash('error', 'Failed to delete product.');
-    }
-
-    return $this->redirect(['index']); // Redirect to product list
-}
-
-    
 }
