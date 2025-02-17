@@ -9,7 +9,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-    width: 250px;
+    width: 200px;
     height: calc(100vh - 56px); /* viewport height - navbar */
     position: sticky;
     top: 56px; /* Same as navbar height */

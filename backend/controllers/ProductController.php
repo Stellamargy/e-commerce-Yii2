@@ -13,6 +13,8 @@ class ProductController extends \yii\web\Controller
 {
     public function actionIndex()
     {
+       
+        
         $productsSearchModel = new ProductSearch();
         $dataProvider = $productsSearchModel->search(Yii::$app->request->queryParams);
         return $this->render('index', [

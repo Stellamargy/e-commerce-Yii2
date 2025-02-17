@@ -19,6 +19,7 @@ return [
         ],
         'user' => [
             'class' => 'webvimark\modules\UserManagement\components\UserConfig',
+            'identityClass' => 'common\models\User',
 
             // 'enableAutoLogin' => true,
             // 'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
@@ -51,10 +52,21 @@ return [
     'modules' => [
         'user-management' => [
             'class' => 'webvimark\modules\UserManagement\UserManagementModule',
+           'enableRegistration' => false,
+           
+         
+            'controllerMap' => [
+                'user' => 'backend\controllers\UserManagementController',
+                'role'=>'backend\controllers\RoleController',
+                'user-permission'=>'backend\controllers\UserPermissionController',
+                'permission'=>'backend\controllers\PermissionController',
+                'auth-item-group'=>'backend\controllers\AuthItemGroupController',
+                'auth'=>'backend\controllers\AuthController'
+            ],
 
-            'enableRegistration' => false,
-            'useEmailAsLogin' => true,
-            'viewPath' => '@backend/views/user-management',
+           
+
+           
 
             // Add regexp validation to passwords. Default pattern does not restrict user and can enter any set of characters.
             // The example below allows user to enter :
@@ -77,7 +89,7 @@ return [
                 $event->action->controller->layout = '@backend/views/layouts/loginLayout';
             } else {
                 // Use your existing backend layout for all other pages
-                $event->action->controller->layout = '@backend/views/layouts/loginLayout'; // or whatever your backend layout is named
+                $event->action->controller->layout = '@backend/views/layouts/main'; // or whatever your backend layout is named
             }
         },
         ],
