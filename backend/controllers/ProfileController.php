@@ -7,6 +7,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * ProfileController implements the CRUD actions for Profile model.
@@ -36,26 +37,7 @@ class ProfileController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Profile::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
-    }
 
     /**
      * Displays a single Profile model.
@@ -63,12 +45,22 @@ class ProfileController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
+    public function actionView()
     {
+        $userId = Yii::$app->user->id;
+        $profile = Profile::findOne(['user_id' => $userId]);
+
+        if (!$profile) {
+            Yii::$app->session->setFlash('info', 'You don’t have a profile yet. Please create one.');
+            return $this->redirect(['create']);
+        }
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'profile' => $profile,
         ]);
     }
+
+
 
     /**
      * Creates a new Profile model.
