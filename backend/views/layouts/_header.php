@@ -19,14 +19,14 @@ use yii\helpers\Html;
     ]);
 
     $menuItems = [
+        // [
+        //     'label' => '<i class="fa-regular fa-user fa-lg"></i>', 
+        //     'url' => ['profile/view'],
+        //     'linkOptions' => ['class' => 'nav-link text-white']
+        // ],
         [
-            'label' => '<i class="fa-regular fa-user fa-lg"></i>', 
-            'url' => ['profile/view'],
-            'linkOptions' => ['class' => 'nav-link text-white']
-        ],
-        [
-            'label' => '<i class="fa-solid fa-arrow-right-from-bracket fa-lg"></i> Log Out', 
-            'url' => ['site/logout'],
+            'label' => 'Log Out <i class="fa-solid fa-arrow-right-from-bracket fa-lg"></i> ', 
+            'url' => ['auth/logout'],
             'linkOptions' => ['class' => 'nav-link text-white']
         ],
     ];
